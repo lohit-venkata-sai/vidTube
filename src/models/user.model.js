@@ -40,7 +40,7 @@ const userSchema = new Schema(
       required: true,
     },
     coverImage: {
-      type: true,
+      type: String,
     },
     watchHistory: [{ type: Schema.Types.ObjectId, ref: "Video" }],
     password: {
@@ -55,7 +55,7 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  if (!this.modified("password")) return next();
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
